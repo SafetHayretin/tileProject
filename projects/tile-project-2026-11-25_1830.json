@@ -1,0 +1,334 @@
+{
+  "version": 2,
+  "walls": [
+    {
+      "id": 1,
+      "name": "хол под",
+      "vertices": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 198,
+          "y": 0
+        },
+        {
+          "x": 198,
+          "y": 168
+        },
+        {
+          "x": 368,
+          "y": 168
+        },
+        {
+          "x": 364.9470158196428,
+          "y": 284.96016111306653
+        },
+        {
+          "x": 241,
+          "y": 283
+        },
+        {
+          "x": 241,
+          "y": 269
+        },
+        {
+          "x": 187,
+          "y": 269
+        },
+        {
+          "x": 187,
+          "y": 283
+        },
+        {
+          "x": 149,
+          "y": 283
+        },
+        {
+          "x": 149,
+          "y": 298
+        },
+        {
+          "x": 225,
+          "y": 300
+        },
+        {
+          "x": 225,
+          "y": 392
+        },
+        {
+          "x": 57,
+          "y": 394
+        },
+        {
+          "x": 57,
+          "y": 287
+        },
+        {
+          "x": 0,
+          "y": 291
+        }
+      ],
+      "closed": true,
+      "openings": [],
+      "params": {
+        "tileW": 61,
+        "tileH": 61,
+        "grout": 2,
+        "waste": 10,
+        "rotate": false,
+        "pattern": "grid",
+        "offset": 49,
+        "startX": 39,
+        "startY": -47,
+        "layoutAngle": 0,
+        "perBox": 5
+      }
+    },
+    {
+      "id": 3,
+      "name": "баня под",
+      "vertices": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 181
+        },
+        {
+          "x": 61.79856841789097,
+          "y": 181.26151041706416
+        },
+        {
+          "x": 61.623070509296255,
+          "y": 91.63061151429474
+        },
+        {
+          "x": 164.96281868119678,
+          "y": 91.40782106474937
+        },
+        {
+          "x": 165,
+          "y": 0
+        }
+      ],
+      "closed": true,
+      "openings": [
+        {
+          "x": 80.8985383568444,
+          "y": 43.319128315264074,
+          "w": 9.53828873464515,
+          "h": 9.741808675016223
+        }
+      ],
+      "params": {
+        "tileW": 60,
+        "tileH": 60,
+        "grout": 1,
+        "waste": 10,
+        "rotate": false,
+        "pattern": "grid",
+        "offset": 50,
+        "startX": 34.5,
+        "startY": -30,
+        "layoutAngle": 45,
+        "perBox": 6
+      }
+    },
+    {
+      "id": 4,
+      "name": "баня стена",
+      "vertices": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 256
+        },
+        {
+          "x": 10,
+          "y": 256
+        },
+        {
+          "x": 10,
+          "y": 56
+        },
+        {
+          "x": 92,
+          "y": 56
+        },
+        {
+          "x": 92,
+          "y": 256
+        },
+        {
+          "x": 169,
+          "y": 256
+        },
+        {
+          "x": 169,
+          "y": 0
+        }
+      ],
+      "closed": true,
+      "openings": [],
+      "params": {
+        "tileW": 120,
+        "tileH": 60,
+        "grout": 1,
+        "waste": 10,
+        "rotate": false,
+        "pattern": "grid",
+        "offset": 50,
+        "startX": 91,
+        "startY": 46,
+        "layoutAngle": 0,
+        "perBox": 2
+      }
+    },
+    {
+      "id": 5,
+      "name": "баня1 стена",
+      "vertices": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 256
+        },
+        {
+          "x": 195,
+          "y": 256
+        },
+        {
+          "x": 195,
+          "y": 39
+        },
+        {
+          "x": 157,
+          "y": 39
+        },
+        {
+          "x": 157,
+          "y": 0
+        }
+      ],
+      "closed": true,
+      "openings": [],
+      "params": {
+        "tileW": 120,
+        "tileH": 60,
+        "grout": 1,
+        "waste": 10,
+        "rotate": false,
+        "pattern": "grid",
+        "offset": 51,
+        "startX": 99,
+        "startY": 40,
+        "layoutAngle": 0,
+        "perBox": 6
+      }
+    },
+    {
+      "id": 6,
+      "name": "баня2 стена",
+      "vertices": [
+        {
+          "x": 15,
+          "y": 0
+        },
+        {
+          "x": 15,
+          "y": 38
+        },
+        {
+          "x": 0,
+          "y": 38
+        },
+        {
+          "x": 0,
+          "y": 256
+        },
+        {
+          "x": 181,
+          "y": 256
+        },
+        {
+          "x": 181,
+          "y": 0
+        }
+      ],
+      "closed": true,
+      "openings": [],
+      "params": {
+        "tileW": 120,
+        "tileH": 60,
+        "grout": 1,
+        "waste": 10,
+        "rotate": false,
+        "pattern": "grid",
+        "offset": 51,
+        "startX": 92.5,
+        "startY": 39,
+        "layoutAngle": 0,
+        "perBox": 6
+      }
+    },
+    {
+      "id": 7,
+      "name": "баня душ стена",
+      "vertices": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 217
+        },
+        {
+          "x": 103,
+          "y": 217
+        },
+        {
+          "x": 103,
+          "y": 0
+        }
+      ],
+      "closed": true,
+      "openings": [],
+      "params": {
+        "tileW": 120,
+        "tileH": 60,
+        "grout": 1,
+        "waste": 10,
+        "rotate": false,
+        "pattern": "grid",
+        "offset": 51,
+        "startX": 0,
+        "startY": 0,
+        "layoutAngle": 0,
+        "perBox": 2
+      }
+    }
+  ],
+  "nextWallId": 10,
+  "activeWallId": 3,
+  "view": {
+    "scale": 2.361666706479762,
+    "tx": 602.4275613920086,
+    "ty": 107.6671359435607
+  },
+  "globalSettings": {
+    "gridCm": "5",
+    "snap": false
+  },
+  "savedAt": 1795624226738
+}
