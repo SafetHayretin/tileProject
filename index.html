@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>Калкулатор за плочки</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div id="app">
+  <div id="canvasWrap">
+    <canvas id="cv"></canvas>
+    <div id="toolbar">
+      <button id="btnPolygon" class="active" title="Чертай полигон точка по точка">Полигон</button>
+      <button id="btnRect" title="Чертай правоъгълник">Правоъгълник</button>
+      <button id="btnOpening" title="Добави отвор (врата/прозорец/ниша)">Отвор</button>
+      <button id="btnEdit" title="Местене/триене на върхове и отвори; клик на сегмент за дължина или нов връх">Редакция</button>
+      <button id="btnMeasure" title="Рулетка — кликни две точки за разстояние">Рулетка</button>
+      <button id="btnFinish" title="Затвори полигона">Затвори контура</button>
+      <button id="btnUndo" title="Премахни последния връх">Назад</button>
+      <button id="btnClear" class="danger" title="Изчисти активната стена">Изчисти стената</button>
+    </div>
+    <div id="legend">
+      <div class="row"><div class="sw" style="background: var(--whole)"></div>Цяла плочка</div>
+      <div class="row"><div class="sw" style="background: var(--cut)"></div>Плочка за рязане</div>
+      <div class="row"><div class="sw" style="background: rgba(78,161,255,0.3); border-color: var(--accent)"></div>Активна стена</div>
+      <div class="row"><div class="sw" style="background: var(--opening)"></div>Отвор</div>
+    </div>
+    <div id="status">Готов за чертане. Кликай, за да поставяш върхове.</div>
+
+    <!-- Inline редактор на дължина / вмъкване на нов връх (в EDIT mode, клик на сегмент) -->
+    <div id="dimEditor" class="dim-editor" style="display:none">
+      <span class="label">Дължина:</span>
+      <input type="number" min="0.1" step="0.1" aria-label="Дължина на сегмента в см" />
+      <span class="suffix">см</span>
+      <button class="split-btn" title="Вмъкни нов връх на това място">+ Връх</button>
+      <span class="hk">Enter · Esc</span>
+    </div>
+
+    <!-- Popup при тап на връх в EDIT mode -->
+    <div id="vertexPopup" class="dim-editor" style="display:none">
+      <span class="label">Връх</span>
+      <button class="del-btn" id="vertexDelBtn">Изтрий</button>
+      <span class="hk">Del · Esc</span>
+    </div>
+  </div>
+
+  <aside id="sidebar">
+    <div class="section">
+      <h3>Стени</h3>
+      <div id="wallsList"></div>
+      <button id="btnAddWall">+ Нова стена</button>
+      <div class="hint">Всяка стена има свои настройки за плочки (размер, фуга, схема, отстъп…). Клик върху ред — превключва активната. Двукратен клик в името — преименуване.</div>
+    </div>
+
+    <div class="section">
+      <h3>Връх по координати</h3>
+      <div class="coord-row">
+        <span class="coord-label">X</span>
+        <input type="number" id="vertexX" step="1" placeholder="0" aria-label="X в см" />
+        <span class="coord-label">Y</span>
+        <input type="number" id="vertexY" step="1" placeholder="0" aria-label="Y в см" />
+        <button id="btnAddVertex" title="Добави връх (Enter)">+</button>
+      </div>
+      <div class="coord-status" id="coordStatus">Добавя връх в активната стена. Ако стената е затворена — първо натисни „Назад" или „+ Нова стена".</div>
+    </div>
+
+    <div class="section">
+      <h3>Запис</h3>
+      <div class="save-row">
+        <button id="btnSave">Запази</button>
+        <button id="btnClearStorage" class="danger">Изтрий запис</button>
+      </div>
+      <div class="save-row" style="margin-top: 6px;">
+        <button id="btnExport" title="Свали проекта като JSON файл">⤓ Експорт</button>
+        <button id="btnImport" title="Зареди проект от JSON файл">⤒ Импорт</button>
+      </div>
+      <input type="file" id="fileImport" accept=".json,application/json" style="display:none" />
+      <div class="save-status" id="saveStatus">Автоматично се запазва в браузъра.</div>
+    </div>
+
+    <div class="section">
+      <h3>Мащаб</h3>
+      <div class="field">
+        <label for="gridCm">Решетка (см / клетка)</label>
+        <input type="number" id="gridCm" min="1" max="100" step="1" value="10" />
+      </div>
+      <div class="field">
+        <label for="snap">Прилепване към решетката</label>
+        <input type="checkbox" id="snap" checked />
+      </div>
+      <div class="hint">Колелце/trackpad — панорама. Ctrl/Cmd+колелце или pinch — zoom. Стрелки, Space+влачене, среден или десен бутон — също пан.</div>
+    </div>
+
+    <div class="section">
+      <h3>Плочка <span style="font-weight:400;text-transform:none;color:var(--accent);font-size:11px;">(на активната стена)</span></h3>
+      <div class="field"><label for="tileW">Ширина (см)</label><input type="number" id="tileW" min="1" step="0.1" value="30" /></div>
+      <div class="field"><label for="tileH">Височина (см)</label><input type="number" id="tileH" min="1" step="0.1" value="60" /></div>
+      <div class="field"><label for="grout">Фуга (мм)</label><input type="number" id="grout" min="0" step="0.5" value="2" /></div>
+      <div class="field"><label for="waste">Допуск за отпадък (%)</label><input type="number" id="waste" min="0" max="100" step="1" value="10" /></div>
+      <div class="field"><label for="rotate">Завъртане на плочката 90°</label><input type="checkbox" id="rotate" /></div>
+    </div>
+
+    <div class="section">
+      <h3>Схема на редене <span style="font-weight:400;text-transform:none;color:var(--accent);font-size:11px;">(на активната стена)</span></h3>
+      <div class="field">
+        <label for="pattern">Схема</label>
+        <select id="pattern">
+          <option value="grid">Решетка (право)</option>
+          <option value="brick">Тухлена (отместване)</option>
+        </select>
+      </div>
+      <div class="field"><label for="offset">Отместване на ред (%)</label><input type="number" id="offset" min="0" max="100" step="1" value="50" /></div>
+      <div class="field"><label for="startX">Отстъп отляво (см)</label><input type="number" id="startX" step="0.5" value="0" title="0 = горен ляв ъгъл на стената; положителни — навътре" /></div>
+      <div class="field"><label for="startY">Отстъп отгоре (см)</label><input type="number" id="startY" step="0.5" value="0" title="0 = горен ляв ъгъл на стената; положителни — навътре" /></div>
+      <div class="hint">0,0 = горен ляв ъгъл на стената. Положителни числа отместват плочките навътре.</div>
+      <div class="field">
+        <label for="layoutAngle">Завъртане на схемата</label>
+        <select id="layoutAngle">
+          <option value="0">0°</option>
+          <option value="45">45° (диагонал)</option>
+          <option value="90">90°</option>
+          <option value="135">135°</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="section">
+      <h3>Опаковка <span style="font-weight:400;text-transform:none;color:var(--accent);font-size:11px;">(на активната стена)</span></h3>
+      <div class="field"><label for="perBox">Плочки в кашон</label><input type="number" id="perBox" min="0" step="1" value="6" /></div>
+    </div>
+
+    <div class="section">
+      <h3>Резултат (всички стени)</h3>
+      <div class="metrics">
+        <div class="metric"><div class="v green" id="mWhole">0</div><div class="l">цели</div></div>
+        <div class="metric"><div class="v orange" id="mCut">0</div><div class="l">за рязане</div></div>
+        <div class="metric wide"><div class="v" id="mTotal">0</div><div class="l">общо нужни (с допуск)</div></div>
+        <div class="metric"><div class="v" id="mArea">0</div><div class="l">площ, м²</div></div>
+        <div class="metric"><div class="v" id="mBoxes">0</div><div class="l">кашони</div></div>
+      </div>
+      <div class="hint" id="hintMsg">Затвори контура поне на една стена.</div>
+    </div>
+  </aside>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
